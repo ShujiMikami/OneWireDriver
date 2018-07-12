@@ -69,6 +69,8 @@
                                     									
                                     <listOptionValue builtIn="false" value="../Inc"/>
                                     									
+                                    <listOptionValue builtIn="false" value="../UserModules/OneWireDriver/Inc"/>
+                                    									
                                     <listOptionValue builtIn="false" value="../Drivers/STM32L4xx_HAL_Driver/Inc"/>
                                     									
                                     <listOptionValue builtIn="false" value="../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy"/>
