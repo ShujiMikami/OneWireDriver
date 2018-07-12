@@ -22,4 +22,7 @@ __attribute__((weak)) void SetPin2RxMode()
 {
 
 }
-
+__attribute__((weak)) GPIO_STATE_t GetPinState()
+{
+	return GPIO_NEGATED;
+}
