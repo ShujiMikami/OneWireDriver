@@ -10,6 +10,9 @@
 #include "GPIO_Wrapper.h"
 #include "Wait_Wrapper.h"
 
+static void write0();
+static void write1();
+
 void ResetPulse()
 {
 	//GPIOをTxモードに
@@ -62,4 +65,32 @@ ONE_WIRE_STATUS_t ReadPresensePulse()
 
 
 	return result;
+}
+void write0()
+{
+	//GPIOをTxモードに
+	SetPin2TxMode();
+
+	//GPIOをアサート
+	AssertPin();
+
+	//tRSTLだけ待つ
+	Wait_us(T_LOW0);
+
+	//GPIOをネゲート
+	NegatePin();
+}
+void write1()
+{
+	//GPIOをTxモードに
+	SetPin2TxMode();
+
+	//GPIOをアサート
+	AssertPin();
+
+	//tRSTLだけ待つ
+	Wait_us(T_LOW1);
+
+	//GPIOをネゲート
+	NegatePin();
 }
