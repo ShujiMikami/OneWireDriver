@@ -4,6 +4,9 @@
  *  Created on: 2018/07/13
  *      Author: Shuji
  */
+
+#define BYTE_SIZE 8
+
 #include "OneWireDriver.h"
 
 #include "OneWireSpecifications.h"
@@ -93,4 +96,16 @@ void write1()
 
 	//GPIOをネゲート
 	NegatePin();
+}
+void WriteByte(unsigned char byteData)
+{
+	int cnt = 0;
+	for(cnt = 0; cnt < BYTE_SIZE; cnt++){
+		if(((byteData >> cnt) & 0x01) == 0x01){
+			write1();
+		}
+		else{
+			write0();
+		}
+	}
 }
