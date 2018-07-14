@@ -16,4 +16,5 @@ typedef enum{
 void ResetPulse();
 ONE_WIRE_STATUS_t ReadPresensePulse();
 void WriteByte(unsigned char byteData);
+unsigned char ReadByte();
 #endif /* ONEWIREDRIVER_INC_ONEWIREDRIVER_H_ */

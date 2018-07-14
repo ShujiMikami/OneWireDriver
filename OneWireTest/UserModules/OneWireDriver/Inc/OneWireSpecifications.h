@@ -26,6 +26,9 @@
 #define T_LOW1_MAX (unsigned short)15
 #define T_LOW1_MIN (unsigned short)1
 
+//read time slot initiate
+#define T_INT      (unsigned short)1
+
 //Read Data Valid in usec
 #define T_RDV (unsigned short)15
 
