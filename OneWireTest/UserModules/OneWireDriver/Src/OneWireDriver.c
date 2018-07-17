@@ -86,6 +86,9 @@ void write0()
 
 	//time Slot単位待つ
 	Wait_us(T_SLOT - T_LOW0);
+
+	//Recovery
+	Wait_us(T_REC);
 }
 void write1()
 {
@@ -103,6 +106,9 @@ void write1()
 
 	//time Slot単位待つ
 	Wait_us(T_SLOT - T_LOW1);
+
+	//Recovery
+	Wait_us(T_REC);
 }
 void WriteByte(unsigned char byteData)
 {
@@ -114,7 +120,6 @@ void WriteByte(unsigned char byteData)
 		else{
 			write0();
 		}
-		Wait_us(T_REC);
 	}
 }
 unsigned char readBit()
@@ -144,6 +149,9 @@ unsigned char readBit()
 
 	//T_Slotまで待つ
 	Wait_us(T_SLOT - T_RC - T_INT);
+
+	//Recovery
+	Wait_us(T_REC);
 
 	//ビットに反映
 	if(currentGPIOState == GPIO_ASSERTED){
