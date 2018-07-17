@@ -29,6 +29,9 @@
 //read time slot initiate
 #define T_INT      (unsigned short)1
 
+//read data wait
+#define T_RC (unsigned short)2
+
 //Read Data Valid in usec
 #define T_RDV (unsigned short)15
 
