@@ -43,7 +43,9 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "Wait_Wrapper.h"
+#include "GPIO_Wrapper.h"
+#include "OneWireDriver.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -95,24 +97,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim1);
 
-
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET);
-  wait_us(10);
-
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET);
-  wait_us(10);
-
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET);
-  wait_us(10);
-
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET);
-  wait_us(10);
-
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET);
-  wait_us(10);
-
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET);
-  //wait_us(60);
+  WriteByte(0x95);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -191,6 +176,54 @@ void wait_us(uint16_t microSecond)
 {
 	__HAL_TIM_SET_COUNTER(&htim1,0);
     while(__HAL_TIM_GET_COUNTER(&htim1) < microSecond);
+}
+void AssertPin()
+{
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET);
+}
+void NegatePin()
+{
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET);
+}
+void SetPin2TxMode()
+{
+	GPIO_InitTypeDef GPIO_InitStruct;
+
+	GPIO_InitStruct.Pin = GPIO_PIN_2;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+}
+void SetPin2RxMode()
+{
+	GPIO_InitTypeDef GPIO_InitStruct;
+
+	GPIO_InitStruct.Pin = GPIO_PIN_2;
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+}
+GPIO_STATE_t GetPinState()
+{
+	GPIO_STATE_t result = GPIO_ASSERTED;
+
+	GPIO_PinState currentState = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2);
+
+	if(currentState == GPIO_PIN_RESET){
+		result = GPIO_NEGATED;
+	}
+	else{
+		result = GPIO_ASSERTED;
+	}
+
+	return result;
+}
+void Wait_us(unsigned short microSecond)
+{
+	__HAL_TIM_SET_COUNTER(&htim1,0);
+	while(__HAL_TIM_GET_COUNTER(&htim1) < microSecond);
 }
 /* USER CODE END 4 */
 
