@@ -83,6 +83,9 @@ void write0()
 
 	//GPIOをネゲート
 	NegatePin();
+
+	//time Slot単位待つ
+	Wait_us(T_SLOT - T_LOW0);
 }
 void write1()
 {
@@ -97,6 +100,9 @@ void write1()
 
 	//GPIOをネゲート
 	NegatePin();
+
+	//time Slot単位待つ
+	Wait_us(T_SLOT - T_LOW1);
 }
 void WriteByte(unsigned char byteData)
 {
@@ -108,6 +114,7 @@ void WriteByte(unsigned char byteData)
 		else{
 			write0();
 		}
+		Wait_us(T_REC);
 	}
 }
 unsigned char readBit()
