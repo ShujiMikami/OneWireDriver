@@ -83,6 +83,12 @@ void write0()
 
 	//GPIOをネゲート
 	NegatePin();
+
+	//time Slot単位待つ
+	Wait_us(T_SLOT - T_LOW0);
+
+	//Recovery
+	Wait_us(T_REC);
 }
 void write1()
 {
@@ -97,6 +103,12 @@ void write1()
 
 	//GPIOをネゲート
 	NegatePin();
+
+	//time Slot単位待つ
+	Wait_us(T_SLOT - T_LOW1);
+
+	//Recovery
+	Wait_us(T_REC);
 }
 void WriteByte(unsigned char byteData)
 {
@@ -129,11 +141,17 @@ unsigned char readBit()
 	//GPIOをRxモードに
 	SetPin2RxMode();
 
-	//T_RDVだけ待つ
-	Wait_us(T_RDV);
+	//T_RCだけ待つ
+	Wait_us(T_RC);
 
 	//状態取得
 	GPIO_STATE_t currentGPIOState = GetPinState();
+
+	//T_Slotまで待つ
+	Wait_us(T_SLOT - T_RC - T_INT);
+
+	//Recovery
+	Wait_us(T_REC);
 
 	//ビットに反映
 	if(currentGPIOState == GPIO_ASSERTED){
