@@ -136,11 +136,14 @@ unsigned char readBit()
 	//GPIOをRxモードに
 	SetPin2RxMode();
 
-	//T_RDVだけ待つ
-	Wait_us(T_RDV);
+	//T_RCだけ待つ
+	Wait_us(T_RC);
 
 	//状態取得
 	GPIO_STATE_t currentGPIOState = GetPinState();
+
+	//T_Slotまで待つ
+	Wait_us(T_SLOT - T_RC - T_INT);
 
 	//ビットに反映
 	if(currentGPIOState == GPIO_ASSERTED){
