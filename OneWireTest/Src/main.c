@@ -97,6 +97,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim1);
 
+  ReadByte();
+
   WriteByte(0x95);
   /* USER CODE END 2 */
 
