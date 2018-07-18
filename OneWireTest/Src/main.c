@@ -97,9 +97,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim1);
 
-  ReadByte();
+  ResetPulse();
 
-  WriteByte(0x95);
+  ONE_WIRE_STATUS_t result = ReadPresensePulse();
+
+  //ReadByte();
+
+  //WriteByte(0x95);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -179,6 +183,15 @@ void wait_us(uint16_t microSecond)
 	__HAL_TIM_SET_COUNTER(&htim1,0);
     while(__HAL_TIM_GET_COUNTER(&htim1) < microSecond);
 }
+void ClearTimerCount()
+{
+	__HAL_TIM_SET_COUNTER(&htim1,0);
+}
+unsigned short GetTimerCount()
+{
+	return __HAL_TIM_GET_COUNTER(&htim1);
+}
+
 void AssertPin()
 {
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET);
@@ -214,10 +227,10 @@ GPIO_STATE_t GetPinState()
 	GPIO_PinState currentState = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2);
 
 	if(currentState == GPIO_PIN_RESET){
-		result = GPIO_NEGATED;
+		result = GPIO_ASSERTED;
 	}
 	else{
-		result = GPIO_ASSERTED;
+		result = GPIO_NEGATED;
 	}
 
 	return result;

@@ -10,3 +10,11 @@ __attribute__((weak)) void Wait_us(unsigned short microSecond)
 {
 
 }
+__attribute__((weak)) void ClearTimerCount()
+{
+
+}
+__attribute__((weak)) unsigned short GetTimerCount()
+{
+	return 0;
+}
