@@ -39,25 +39,31 @@ ONE_WIRE_STATUS_t ReadPresensePulse()
 	SetPin2RxMode();
 
 	//GPIOの状態を監視
-	int cnt = 0;
-	GPIO_STATE_t currentStatus = GPIO_NEGATED;
 	int startCnt = -1;//最初からAssertの可能性もあるので-1にしとく
 	int endCnt = -1;
-	for(cnt = 0; cnt < T_RSTH; cnt++){//T_RSTHの間,計測し続ける
-		//ピンの状態を取得
-		currentStatus = GetPinState();
 
-		if(startCnt < 0){//初回のアサート未検出
-			if(currentStatus == GPIO_ASSERTED){//アサートならば
-				startCnt = cnt;
+	GPIO_STATE_t prevState = GetPinState();
+
+	//タイマーをリセット
+	ClearTimerCount();
+
+	while(GetTimerCount() < T_RSTH){
+		//ピンの状態を取得
+		GPIO_STATE_t currentStatus = GetPinState();
+
+		//立ち下がりを待つ
+		if(prevState == GPIO_NEGATED && currentStatus == GPIO_ASSERTED){
+			startCnt = GetTimerCount();
+		}
+
+		//立ち上がりを待つ
+		if(startCnt > 0){//立ち下がり検出後
+			if(prevState == GPIO_ASSERTED && currentStatus == GPIO_NEGATED){
+				endCnt = GetTimerCount();
 			}
 		}
-		else{//アサート検出済み
-			if(currentStatus == GPIO_NEGATED && endCnt < 0){//ネゲート未検出
-				endCnt = cnt;
-			}
-		}
-		Wait_us(1);//1usec周期
+
+		prevState = currentStatus;
 	}
 
 	if(endCnt - startCnt >= T_PDLOW_MIN && endCnt - startCnt <= T_PDLOW_MAX){//規定の範囲のアサートパルスが着たら
