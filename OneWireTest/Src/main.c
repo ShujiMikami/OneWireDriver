@@ -101,9 +101,9 @@ int main(void)
 
   ResetPulse();
 
-  ReadPresensePulse();
+  ONE_WIRE_STATUS_t result = ReadPresensePulse();
 
-  //ReadByte();
+  ReadByte();
 
   //WriteByte(0x95);
   /* USER CODE END 2 */
