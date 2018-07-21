@@ -97,9 +97,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim1);
 
+  HAL_Delay(500);
+
   ResetPulse();
 
-  ONE_WIRE_STATUS_t result = ReadPresensePulse();
+  ReadPresensePulse();
 
   //ReadByte();
 
@@ -194,37 +196,37 @@ unsigned short GetTimerCount()
 
 void AssertPin()
 {
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_RESET);
 }
 void NegatePin()
 {
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_SET);
 }
 void SetPin2TxMode()
 {
 	GPIO_InitTypeDef GPIO_InitStruct;
 
-	GPIO_InitStruct.Pin = GPIO_PIN_2;
+	GPIO_InitStruct.Pin = GPIO_PIN_0;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 }
 void SetPin2RxMode()
 {
 	GPIO_InitTypeDef GPIO_InitStruct;
 
-	GPIO_InitStruct.Pin = GPIO_PIN_2;
+	GPIO_InitStruct.Pin = GPIO_PIN_0;
 	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 }
 GPIO_STATE_t GetPinState()
 {
 	GPIO_STATE_t result = GPIO_ASSERTED;
 
-	GPIO_PinState currentState = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2);
+	GPIO_PinState currentState = HAL_GPIO_ReadPin(GPIOD, GPIO_PIN_0);
 
 	if(currentState == GPIO_PIN_RESET){
 		result = GPIO_ASSERTED;
