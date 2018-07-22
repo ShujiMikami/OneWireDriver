@@ -181,3 +181,19 @@ unsigned char ReadByte()
 
 	return result;
 }
+void SearchRom()
+{
+
+}
+void ReadRom()
+{
+
+}
+void MatchRom()
+{
+
+}
+void SkipRom()
+{
+
+}

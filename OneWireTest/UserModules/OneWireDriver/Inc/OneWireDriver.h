@@ -20,7 +20,10 @@ void ResetPulse();
 ONE_WIRE_STATUS_t ReadPresensePulse();
 void WriteByte(unsigned char byteData);
 unsigned char ReadByte();
-
+void SearchRom();
+void ReadRom();
+void MatchRom();
+void SkipRom();
 
 
 #endif /* ONEWIREDRIVER_INC_ONEWIREDRIVER_H_ */
