@@ -103,6 +103,9 @@ int main(void)
 
   ONE_WIRE_STATUS_t result = ReadPresensePulse();
 
+
+  ONE_WIRE_ROM_CODE_t romCode = ReadRom();
+  /*
   if(result == ONE_WIRE_SUCCESS){
 	  WriteByte(0x33);
   }
@@ -117,6 +120,7 @@ int main(void)
 		  data[cnt] = ReadByte();
 	  }
   }
+  */
 
   //WriteByte(0x95);
   /* USER CODE END 2 */

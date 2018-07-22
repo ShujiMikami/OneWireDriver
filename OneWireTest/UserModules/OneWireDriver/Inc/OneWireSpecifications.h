@@ -66,5 +66,6 @@
 //Alarm Search Code
 #define CODE_ALARM_SEARCH (unsigned char)0xEC
 
-
+//ROM Code Size
+#define ROM_CODE_BYTE_SIZE (unsigned char)8
 #endif /* ONEWIREDRIVER_INC_ONEWIRESPECIFICATIONS_H_ */
