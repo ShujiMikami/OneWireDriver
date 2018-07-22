@@ -51,4 +51,21 @@
 #define T_PDLOW_MAX (unsigned short)240
 #define T_PDLOW_MIN (unsigned short)60
 
+//Serach Rom Code
+#define CODE_SEARCH_ROM (unsigned char)0xF0
+
+//Read Rom Code
+#define CODE_READ_ROM (unsigned char)0x33
+
+//Match Rom Code
+#define CODE_MATCH_ROM (unsigned char)0x55
+
+//Skip Rom Code
+#define CODE_SKIP_ROM (unsigned char)0xCC
+
+//Alarm Search Code
+#define CODE_ALARM_SEARCH (unsigned char)0xEC
+
+//ROM Code Size
+#define ROM_CODE_BYTE_SIZE (unsigned char)8
 #endif /* ONEWIREDRIVER_INC_ONEWIRESPECIFICATIONS_H_ */

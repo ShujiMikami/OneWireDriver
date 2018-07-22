@@ -6,6 +6,15 @@
  */
 
 #define BYTE_SIZE 8
+#define FAMILY_CODE_POS 0
+#define SERIAL_NUMBER_LL_POS 1
+#define SERIAL_NUMBER_LH_POS 2
+#define SERIAL_NUMBER_ML_POS 3
+#define SERIAL_NUMBER_MH_POS 4
+#define SERIAL_NUMBER_HL_POS 5
+#define SERIAL_NUMBER_HH_POS 6
+#define CRC_CODE_POS 7
+
 
 #include "OneWireDriver.h"
 
@@ -16,6 +25,7 @@
 static void write0();
 static void write1();
 static unsigned char readBit();
+static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, unsigned char* buffer);
 
 void ResetPulse()
 {
@@ -180,4 +190,60 @@ unsigned char ReadByte()
 	}
 
 	return result;
+}
+void SearchRom()
+{
+
+}
+ONE_WIRE_ROM_CODE_t ReadRom()
+{
+	ONE_WIRE_ROM_CODE_t result;
+
+	//ReadROM命令
+	WriteByte(CODE_READ_ROM);
+
+	//64bitコードで帰ってくる.
+	unsigned char data[ROM_CODE_BYTE_SIZE] = {0};
+	int cnt = 0;
+	for(cnt = 0; cnt < ROM_CODE_BYTE_SIZE; cnt++){
+		data[cnt] = ReadByte();
+	}
+
+	result.Family_Code = data[FAMILY_CODE_POS];
+	result.SerialNumber_L = (unsigned short)data[SERIAL_NUMBER_LL_POS] | ((unsigned short)data[SERIAL_NUMBER_LH_POS] << BYTE_SIZE);
+	result.SerialNumber_L = (unsigned short)data[SERIAL_NUMBER_ML_POS] | ((unsigned short)data[SERIAL_NUMBER_MH_POS] << BYTE_SIZE);
+	result.SerialNumber_L = (unsigned short)data[SERIAL_NUMBER_HL_POS] | ((unsigned short)data[SERIAL_NUMBER_HH_POS] << BYTE_SIZE);
+	result.CRC_Code = data[CRC_CODE_POS];
+
+	return result;
+}
+void MatchRom(ONE_WIRE_ROM_CODE_t romCodeToMatch)
+{
+	//MatchROM命令
+	WriteByte(CODE_MATCH_ROM);
+
+	//ROMコードを順次送信
+	unsigned char data[ROM_CODE_BYTE_SIZE] = {0};
+	getByteArrayFromRomCode(romCodeToMatch, data);
+
+	int cnt = 0;
+	for(cnt = 0; cnt < ROM_CODE_BYTE_SIZE; cnt++){
+		WriteByte(data[cnt]);
+	}
+}
+void SkipRom()
+{
+	//SkipROM命令
+	WriteByte(CODE_SKIP_ROM);
+}
+static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, unsigned char* buffer)
+{
+	buffer[FAMILY_CODE_POS] = data.Family_Code;
+	buffer[SERIAL_NUMBER_LL_POS] = (unsigned char)data.SerialNumber_L;
+	buffer[SERIAL_NUMBER_LH_POS] = (unsigned char)(data.SerialNumber_L >> BYTE_SIZE);
+	buffer[SERIAL_NUMBER_ML_POS] = (unsigned char)data.SerialNumber_M;
+	buffer[SERIAL_NUMBER_MH_POS] = (unsigned char)(data.SerialNumber_M >> BYTE_SIZE);
+	buffer[SERIAL_NUMBER_HL_POS] = (unsigned char)data.SerialNumber_H;
+	buffer[SERIAL_NUMBER_HH_POS] = (unsigned char)(data.SerialNumber_H >> BYTE_SIZE);
+	buffer[CRC_CODE_POS] = data.CRC_Code;
 }
