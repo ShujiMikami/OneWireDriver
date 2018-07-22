@@ -103,7 +103,20 @@ int main(void)
 
   ONE_WIRE_STATUS_t result = ReadPresensePulse();
 
-  ReadByte();
+  if(result == ONE_WIRE_SUCCESS){
+	  WriteByte(0x33);
+  }
+
+  uint8_t data[8];
+  int cnt = 0;
+
+  if(result == ONE_WIRE_SUCCESS){
+	  for(cnt = 0; cnt < 8; cnt++)
+	  {
+
+		  data[cnt] = ReadByte();
+	  }
+  }
 
   //WriteByte(0x95);
   /* USER CODE END 2 */
