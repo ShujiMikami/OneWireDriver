@@ -64,7 +64,7 @@ void SystemClock_Config(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-static void wait_us(uint16_t microSecond);
+
 /* USER CODE END 0 */
 
 int main(void)
@@ -106,24 +106,7 @@ int main(void)
 
   ONE_WIRE_ROM_CODE_t romCode = ReadRom();
 
-  /*
-  if(result == ONE_WIRE_SUCCESS){
-	  WriteByte(0x33);
-  }
 
-  uint8_t data[8];
-  int cnt = 0;
-
-  if(result == ONE_WIRE_SUCCESS){
-	  for(cnt = 0; cnt < 8; cnt++)
-	  {
-
-		  data[cnt] = ReadByte();
-	  }
-  }
-  */
-
-  //WriteByte(0x95);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -198,11 +181,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void wait_us(uint16_t microSecond)
-{
-	__HAL_TIM_SET_COUNTER(&htim1,0);
-    while(__HAL_TIM_GET_COUNTER(&htim1) < microSecond);
-}
 void ClearTimerCount()
 {
 	__HAL_TIM_SET_COUNTER(&htim1,0);

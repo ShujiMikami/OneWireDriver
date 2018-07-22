@@ -233,7 +233,8 @@ void MatchRom(ONE_WIRE_ROM_CODE_t romCodeToMatch)
 }
 void SkipRom()
 {
-
+	//SkipROM命令
+	WriteByte(CODE_SKIP_ROM);
 }
 static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, unsigned char* buffer)
 {
