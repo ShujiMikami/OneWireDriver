@@ -30,7 +30,7 @@ void WriteByte(unsigned char byteData);
 unsigned char ReadByte();
 void SearchRom();
 ONE_WIRE_ROM_CODE_t ReadRom();
-void MatchRom();
+void MatchRom(ONE_WIRE_ROM_CODE_t romCodeToMatch);
 void SkipRom();
 
 

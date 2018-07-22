@@ -25,6 +25,7 @@
 static void write0();
 static void write1();
 static unsigned char readBit();
+static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, unsigned char* buffer);
 
 void ResetPulse()
 {
@@ -216,11 +217,32 @@ ONE_WIRE_ROM_CODE_t ReadRom()
 
 	return result;
 }
-void MatchRom()
+void MatchRom(ONE_WIRE_ROM_CODE_t romCodeToMatch)
 {
+	//MatchROM命令
+	WriteByte(CODE_MATCH_ROM);
 
+	//ROMコードを順次送信
+	unsigned char data[ROM_CODE_BYTE_SIZE] = {0};
+	getByteArrayFromRomCode(romCodeToMatch, data);
+
+	int cnt = 0;
+	for(cnt = 0; cnt < ROM_CODE_BYTE_SIZE; cnt++){
+		WriteByte(data[cnt]);
+	}
 }
 void SkipRom()
 {
 
+}
+static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, unsigned char* buffer)
+{
+	buffer[FAMILY_CODE_POS] = data.Family_Code;
+	buffer[SERIAL_NUMBER_LL_POS] = (unsigned char)data.SerialNumber_L;
+	buffer[SERIAL_NUMBER_LH_POS] = (unsigned char)(data.SerialNumber_L >> BYTE_SIZE);
+	buffer[SERIAL_NUMBER_ML_POS] = (unsigned char)data.SerialNumber_M;
+	buffer[SERIAL_NUMBER_MH_POS] = (unsigned char)(data.SerialNumber_M >> BYTE_SIZE);
+	buffer[SERIAL_NUMBER_HL_POS] = (unsigned char)data.SerialNumber_H;
+	buffer[SERIAL_NUMBER_HH_POS] = (unsigned char)(data.SerialNumber_H >> BYTE_SIZE);
+	buffer[CRC_CODE_POS] = data.CRC_Code;
 }
