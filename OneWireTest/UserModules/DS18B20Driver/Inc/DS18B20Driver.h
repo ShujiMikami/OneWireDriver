@@ -8,9 +8,17 @@
 #ifndef DS18B20DRIVER_INC_DS18B20DRIVER_H_
 #define DS18B20DRIVER_INC_DS18B20DRIVER_H_
 
+typedef struct{
+	unsigned short Temperature;
+	unsigned char T_H_Register;
+	unsigned char T_L_Register;
+	unsigned char Configuration_Register;
+	unsigned char CRC_Data;
+}ScratchPadData_t;
+
 void Convert();
 void WriteScratchPad();
-void ReadScratchPad();
+ScratchPadData_t ReadScratchPad();
 void RecallE2();
 void ReadPowerSupply();
 
