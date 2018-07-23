@@ -247,3 +247,7 @@ static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, unsigned char* buf
 	buffer[SERIAL_NUMBER_HH_POS] = (unsigned char)(data.SerialNumber_H >> BYTE_SIZE);
 	buffer[CRC_CODE_POS] = data.CRC_Code;
 }
+unsigned char ReadSlot()
+{
+	return readBit();
+}

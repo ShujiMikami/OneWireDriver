@@ -32,6 +32,7 @@ void SearchRom();
 ONE_WIRE_ROM_CODE_t ReadRom();
 void MatchRom(ONE_WIRE_ROM_CODE_t romCodeToMatch);
 void SkipRom();
+unsigned char ReadSlot();
 
 
 #endif /* ONEWIREDRIVER_INC_ONEWIREDRIVER_H_ */
