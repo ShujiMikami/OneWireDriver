@@ -19,7 +19,12 @@ void Convert()
 }
 void waitForConvert()
 {
-
+	while(1){
+		unsigned char status = ReadSlot();
+		if(status == CONVERSION_FINISH){
+			break;
+		}
+	}
 }
 void WriteScratchPad()
 {
