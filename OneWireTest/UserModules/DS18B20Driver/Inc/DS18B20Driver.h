@@ -17,7 +17,7 @@ typedef struct{
 }ScratchPadData_t;
 
 void Convert();
-void WriteScratchPad();
+void WriteScratchPad(ScratchPadData_t dataToWrite);
 ScratchPadData_t ReadScratchPad();
 void RecallE2();
 void ReadPowerSupply();

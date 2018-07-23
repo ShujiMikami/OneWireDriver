@@ -23,6 +23,9 @@
 #define CONFIGURATION_REG_POS 4
 #define CRC_POS 8
 
+#define CODE_WRITE_SCRATCHPAD (unsigned char)0x4E
+#define WRITABLE_BYTE_LENGTH 3
+
 static void waitForConvert();
 
 void Convert()
@@ -40,9 +43,19 @@ void waitForConvert()
 		}
 	}
 }
-void WriteScratchPad()
+void WriteScratchPad(ScratchPadData_t dataToWrite)
 {
+	unsigned char data[WRITABLE_BYTE_LENGTH] = {0};
 
+	data[0] = dataToWrite.T_H_Register;
+	data[1] = dataToWrite.T_L_Register;
+	data[2] = dataToWrite.Configuration_Register;
+
+	WriteByte(CODE_WRITE_SCRATCHPAD);
+	int cnt = 0;
+	for(cnt = 0; cnt < WRITABLE_BYTE_LENGTH; cnt++){
+		WriteByte(data[cnt]);
+	}
 }
 ScratchPadData_t ReadScratchPad()
 {
