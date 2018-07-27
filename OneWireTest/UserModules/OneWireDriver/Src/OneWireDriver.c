@@ -26,8 +26,9 @@ static void write0();
 static void write1();
 static unsigned char readBit();
 static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, unsigned char* buffer);
+static ONE_WIRE_STATUS_t readPresensePulse();
 
-void ResetPulse()
+ONE_WIRE_STATUS_t ResetPulse()
 {
 	//GPIOをTxモードに
 	SetPin2TxMode();
@@ -40,8 +41,11 @@ void ResetPulse()
 
 	//GPIOをネゲート
 	NegatePin();
+
+	//PresensePulseを読む
+	return readPresensePulse();
 }
-ONE_WIRE_STATUS_t ReadPresensePulse()
+ONE_WIRE_STATUS_t readPresensePulse()
 {
 	ONE_WIRE_STATUS_t result = ONE_WIRE_FAIL;
 
