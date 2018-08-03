@@ -22,11 +22,22 @@
 #include "GPIO_Wrapper.h"
 #include "Wait_Wrapper.h"
 
+typedef enum{
+	BOTH_EXIST,
+	ONLY_1_EXIST,
+	ONLY_0_EXIST,
+	NO_DEVICE
+}SearchROMBitState_t;
+
+
+
 static void write0();
 static void write1();
-static unsigned char readBit();
-static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, unsigned char* buffer);
+static uint8_t readBit();
+static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, uint8_t* buffer);
 static ONE_WIRE_STATUS_t readPresensePulse();
+static SearchROMBitState_t searchROMBitCheck();
+
 
 ONE_WIRE_STATUS_t ResetPulse()
 {
@@ -130,7 +141,7 @@ void write1()
 	//Recovery
 	Wait_us(T_REC);
 }
-void WriteByte(unsigned char byteData)
+void WriteByte(uint8_t byteData)
 {
 	int cnt = 0;
 	for(cnt = 0; cnt < BYTE_SIZE; cnt++){
@@ -142,9 +153,9 @@ void WriteByte(unsigned char byteData)
 		}
 	}
 }
-unsigned char readBit()
+uint8_t readBit()
 {
-	unsigned char result = 0;
+	uint8_t result = 0;
 
 	//GPIOをTxモードに
 	SetPin2TxMode();
@@ -183,20 +194,53 @@ unsigned char readBit()
 
 	return result;
 }
-unsigned char ReadByte()
+uint8_t ReadByte()
 {
-	unsigned char result = 0;
+	uint8_t result = 0;
 
 	int cnt = 0;
 	for(cnt = 0; cnt < BYTE_SIZE; cnt++){
-		unsigned char currentBit = readBit();
+		uint8_t currentBit = readBit();
 		result |= (currentBit << cnt);
+	}
+
+	return result;
+}
+SearchROMBitState_t searchROMBitCheck()
+{
+	SearchROMBitState_t result = NO_DEVICE;
+
+	//LSbのAND読み込み
+	uint8_t andOfLsb = readBit();
+
+	//LSbの反転のAND読み込み
+	uint8_t andOfNotLsb = readBit();
+
+	//両者を並べた数値作成
+	uint8_t flag = (andOfLsb << 1) | andOfNotLsb;
+
+	switch(flag){
+	case 0://このビット位置は特定不能
+		result = BOTH_EXIST;
+		break;
+	case 1://このビット位置は全デバイス0
+		result = ONLY_0_EXIST;
+		break;
+	case 2://このビット位置は全デバイス1
+		result = ONLY_1_EXIST;
+		break;
+	case 3://デバイスいない
+		result = NO_DEVICE;
+		break;
 	}
 
 	return result;
 }
 void SearchRom()
 {
+	//SearchROM命令
+	WriteByte(CODE_SEARCH_ROM);
+
 
 }
 ONE_WIRE_ROM_CODE_t ReadRom()
@@ -207,16 +251,16 @@ ONE_WIRE_ROM_CODE_t ReadRom()
 	WriteByte(CODE_READ_ROM);
 
 	//64bitコードで帰ってくる.
-	unsigned char data[ROM_CODE_BYTE_SIZE] = {0};
+	uint8_t data[ROM_CODE_BYTE_SIZE] = {0};
 	int cnt = 0;
 	for(cnt = 0; cnt < ROM_CODE_BYTE_SIZE; cnt++){
 		data[cnt] = ReadByte();
 	}
 
 	result.Family_Code = data[FAMILY_CODE_POS];
-	result.SerialNumber_L = (unsigned short)data[SERIAL_NUMBER_LL_POS] | ((unsigned short)data[SERIAL_NUMBER_LH_POS] << BYTE_SIZE);
-	result.SerialNumber_L = (unsigned short)data[SERIAL_NUMBER_ML_POS] | ((unsigned short)data[SERIAL_NUMBER_MH_POS] << BYTE_SIZE);
-	result.SerialNumber_L = (unsigned short)data[SERIAL_NUMBER_HL_POS] | ((unsigned short)data[SERIAL_NUMBER_HH_POS] << BYTE_SIZE);
+	result.SerialNumber_L = (uint16_t)data[SERIAL_NUMBER_LL_POS] | ((uint16_t)data[SERIAL_NUMBER_LH_POS] << BYTE_SIZE);
+	result.SerialNumber_L = (uint16_t)data[SERIAL_NUMBER_ML_POS] | ((uint16_t)data[SERIAL_NUMBER_MH_POS] << BYTE_SIZE);
+	result.SerialNumber_L = (uint16_t)data[SERIAL_NUMBER_HL_POS] | ((uint16_t)data[SERIAL_NUMBER_HH_POS] << BYTE_SIZE);
 	result.CRC_Code = data[CRC_CODE_POS];
 
 	return result;
@@ -227,7 +271,7 @@ void MatchRom(ONE_WIRE_ROM_CODE_t romCodeToMatch)
 	WriteByte(CODE_MATCH_ROM);
 
 	//ROMコードを順次送信
-	unsigned char data[ROM_CODE_BYTE_SIZE] = {0};
+	uint8_t data[ROM_CODE_BYTE_SIZE] = {0};
 	getByteArrayFromRomCode(romCodeToMatch, data);
 
 	int cnt = 0;
@@ -240,18 +284,18 @@ void SkipRom()
 	//SkipROM命令
 	WriteByte(CODE_SKIP_ROM);
 }
-static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, unsigned char* buffer)
+void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, uint8_t* buffer)
 {
 	buffer[FAMILY_CODE_POS] = data.Family_Code;
-	buffer[SERIAL_NUMBER_LL_POS] = (unsigned char)data.SerialNumber_L;
-	buffer[SERIAL_NUMBER_LH_POS] = (unsigned char)(data.SerialNumber_L >> BYTE_SIZE);
-	buffer[SERIAL_NUMBER_ML_POS] = (unsigned char)data.SerialNumber_M;
-	buffer[SERIAL_NUMBER_MH_POS] = (unsigned char)(data.SerialNumber_M >> BYTE_SIZE);
-	buffer[SERIAL_NUMBER_HL_POS] = (unsigned char)data.SerialNumber_H;
-	buffer[SERIAL_NUMBER_HH_POS] = (unsigned char)(data.SerialNumber_H >> BYTE_SIZE);
+	buffer[SERIAL_NUMBER_LL_POS] = (uint8_t)data.SerialNumber_L;
+	buffer[SERIAL_NUMBER_LH_POS] = (uint8_t)(data.SerialNumber_L >> BYTE_SIZE);
+	buffer[SERIAL_NUMBER_ML_POS] = (uint8_t)data.SerialNumber_M;
+	buffer[SERIAL_NUMBER_MH_POS] = (uint8_t)(data.SerialNumber_M >> BYTE_SIZE);
+	buffer[SERIAL_NUMBER_HL_POS] = (uint8_t)data.SerialNumber_H;
+	buffer[SERIAL_NUMBER_HH_POS] = (uint8_t)(data.SerialNumber_H >> BYTE_SIZE);
 	buffer[CRC_CODE_POS] = data.CRC_Code;
 }
-unsigned char ReadSlot()
+uint8_t ReadSlot()
 {
 	return readBit();
 }

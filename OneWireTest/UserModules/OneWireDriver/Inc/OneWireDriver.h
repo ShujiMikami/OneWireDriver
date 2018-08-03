@@ -8,7 +8,8 @@
 #ifndef ONEWIREDRIVER_INC_ONEWIREDRIVER_H_
 #define ONEWIREDRIVER_INC_ONEWIREDRIVER_H_
 
-
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
 
 
 typedef enum{
@@ -17,21 +18,21 @@ typedef enum{
 }ONE_WIRE_STATUS_t;
 
 typedef struct{
-	unsigned char Family_Code;
-	unsigned short SerialNumber_H;
-	unsigned short SerialNumber_M;
-	unsigned short SerialNumber_L;
-	unsigned char CRC_Code;
+	uint8_t Family_Code;
+	uint16_t SerialNumber_H;
+	uint16_t SerialNumber_M;
+	uint16_t SerialNumber_L;
+	uint8_t CRC_Code;
 }ONE_WIRE_ROM_CODE_t;
 
 ONE_WIRE_STATUS_t ResetPulse();
 void WriteByte(unsigned char byteData);
-unsigned char ReadByte();
+uint8_t ReadByte();
 void SearchRom();
 ONE_WIRE_ROM_CODE_t ReadRom();
 void MatchRom(ONE_WIRE_ROM_CODE_t romCodeToMatch);
 void SkipRom();
-unsigned char ReadSlot();
+uint8_t ReadSlot();
 
 
 #endif /* ONEWIREDRIVER_INC_ONEWIREDRIVER_H_ */
