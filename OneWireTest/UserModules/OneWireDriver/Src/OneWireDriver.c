@@ -15,6 +15,7 @@
 #define SERIAL_NUMBER_HH_POS 6
 #define CRC_CODE_POS 7
 
+#define MAX_DEVICE_COUNT (uint16_t)0xFFFF
 
 #include "OneWireDriver.h"
 
@@ -23,13 +24,17 @@
 #include "Wait_Wrapper.h"
 
 typedef enum{
+	NOT_SEARCHED,
 	BOTH_EXIST,
 	ONLY_1_EXIST,
 	ONLY_0_EXIST,
 	NO_DEVICE
 }SearchROMBitState_t;
 
-
+static ONE_WIRE_ROM_CODE_t createROMStructFromBit(uint8_t bitData[64]);
+static ONE_WIRE_ROM_CODE_t createROMStructFromByte(uint8_t byteData[8]);
+static uint16_t numOfDeviceFound = 0;
+static ONE_WIRE_ROM_CODE_t foundROMCode[MAX_DEVICE_COUNT];
 
 static void write0();
 static void write1();
@@ -238,10 +243,60 @@ SearchROMBitState_t searchROMBitCheck()
 }
 void SearchRom()
 {
+	//各ビットの状態
+	SearchROMBitState_t bitState[64] = {NOT_SEARCHED};
+
+	//各ビットの値
+	uint8_t bitArray[64] = {0};
+
 	//SearchROM命令
 	WriteByte(CODE_SEARCH_ROM);
 
+	while(1){
 
+		//TODO while抜けを実装
+
+		int cnt = 0;
+		for(cnt = 0; cnt < 64; cnt++){
+			//bit読み
+			SearchROMBitState_t currentBitState = searchROMBitCheck();
+
+			switch(currentBitState){
+			case ONLY_0_EXIST: //0しか存在しない場合ビット確定して次
+				write0();
+				bitArray[cnt] = 0;
+				break;
+			case ONLY_1_EXIST: //1しか存在しない場合ビット確定して次
+				write1();
+				bitArray[cnt] = 1;
+				break;
+			case BOTH_EXIST:
+				if(bitState[cnt] == NOT_SEARCHED){//0側をサーチしていない場合まず0をセット
+					write0();
+					bitArray[cnt] = 0;
+				}
+				else{//0側をサーチ済みの場合1をセット
+					write1();
+					bitArray[cnt] = 1;
+				}
+				break;
+			case NO_DEVICE:
+				break;
+			}
+
+			if(currentBitState == NO_DEVICE){//デバイス見つからずの場合はもうこのルートをサーチしない
+				break;
+			}
+			else{//ビット値を格納して次へ
+				bitState[cnt] = currentBitState;
+			}
+		}
+
+		if(cnt >= 64){//最後のビットまで行ったらデータコピー
+			foundROMCode[numOfDeviceFound] = createROMStructFromBit(bitArray);
+			numOfDeviceFound++;
+		}
+	}
 }
 ONE_WIRE_ROM_CODE_t ReadRom()
 {
@@ -298,4 +353,16 @@ void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, uint8_t* buffer)
 uint8_t ReadSlot()
 {
 	return readBit();
+}
+ONE_WIRE_ROM_CODE_t createROMStructFromBit(uint8_t byteData[64])
+{
+	ONE_WIRE_ROM_CODE_t result;
+	//TODO 実装
+	return result;
+}
+ONE_WIRE_ROM_CODE_t createROMStructFromByte(uint8_t byteData[8])
+{
+	ONE_WIRE_ROM_CODE_t result;
+	//TODO 実装
+	return result;
 }
