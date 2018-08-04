@@ -100,34 +100,31 @@ int main(void)
 
   HAL_Delay(500);
 
-  ResetPulse();
+  SearchRom();
 
-  ONE_WIRE_STATUS_t result = ReadPresensePulse();
-
-  SkipRom();
-
-//  ONE_WIRE_ROM_CODE_t romCode = ReadRom();
-  Convert();
-
-  ResetPulse();
-
-  result = ReadPresensePulse();
-
-  SkipRom();
-
-  ScratchPadData_t scratchPad = ReadScratchPad();
-
-  int16_t intMask = ~0xFFF;
-  int16_t signMask = 0x8000;
-
-  int16_t temperatureInt = 0;
-  temperatureInt = scratchPad.Temperature;
-  if((scratchPad.Temperature & signMask) != 0){
-	  temperatureInt |= intMask;
-  }
-
-  double temperature = 0;
-  temperature = temperatureInt * 0.0625;
+//  ONE_WIRE_STATUS_t result = ResetPulse();
+//
+//  SkipRom();
+//
+//  Convert();
+//
+//  result = ResetPulse();
+//
+//  SkipRom();
+//
+//  ScratchPadData_t scratchPad = ReadScratchPad();
+//
+//  int16_t intMask = ~0xFFF;
+//  int16_t signMask = 0x8000;
+//
+//  int16_t temperatureInt = 0;
+//  temperatureInt = scratchPad.Temperature;
+//  if((scratchPad.Temperature & signMask) != 0){
+//	  temperatureInt |= intMask;
+//  }
+//
+//  double temperature = 0;
+//  temperature = temperatureInt * 0.0625;
 
   /* USER CODE END 2 */
 

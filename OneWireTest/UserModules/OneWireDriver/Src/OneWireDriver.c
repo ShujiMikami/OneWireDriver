@@ -15,7 +15,7 @@
 #define SERIAL_NUMBER_HH_POS 6
 #define CRC_CODE_POS 7
 
-#define MAX_DEVICE_COUNT (uint16_t)0xFFFF
+#define MAX_DEVICE_COUNT (uint16_t)0xFF
 
 #include "OneWireDriver.h"
 
@@ -249,10 +249,12 @@ void SearchRom()
 	//各ビットの値
 	uint8_t bitArray[64] = {0};
 
-	//SearchROM命令
-	WriteByte(CODE_SEARCH_ROM);
+
 
 	while(1){
+		ONE_WIRE_STATUS_t result = ResetPulse();
+		//SearchROM命令
+		WriteByte(CODE_SEARCH_ROM);
 
 		//TODO while抜けを実装
 
@@ -295,6 +297,7 @@ void SearchRom()
 		if(cnt >= 64){//最後のビットまで行ったらデータコピー
 			foundROMCode[numOfDeviceFound] = createROMStructFromBit(bitArray);
 			numOfDeviceFound++;
+
 		}
 	}
 }
