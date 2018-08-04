@@ -364,12 +364,16 @@ uint8_t ReadSlot()
 }
 ONE_WIRE_ROM_CODE_t createROMStructFromBit(uint8_t bitData[64])
 {
-	ONE_WIRE_ROM_CODE_t result;
-	//TODO 実装
+	uint8_t byteData[8] = {0};
+	int cnt = 0;
+	for(cnt = 0; cnt < 8; cnt++){
+		int i = 0;
+		for(i = 0; i < 8; i++){
+			byteData[cnt] |= (bitData[8 * cnt + i] << i);
+		}
+	}
 
-
-
-	return result;
+	return createROMStructFromByte(byteData);
 }
 ONE_WIRE_ROM_CODE_t createROMStructFromByte(uint8_t byteData[8])
 {
