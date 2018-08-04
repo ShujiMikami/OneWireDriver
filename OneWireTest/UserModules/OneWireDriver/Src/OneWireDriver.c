@@ -246,10 +246,10 @@ SearchROMBitState_t searchROMBitCheck()
 void SearchRom()
 {
 	//各ビットの状態
-	SearchROMBitState_t bitState[64] = {NOT_SEARCHED};
+	SearchROMBitState_t bitState[ROMCODE_BIT_LENGTH] = {NOT_SEARCHED};
 
 	//各ビットの値
-	uint8_t bitArray[64] = {0};
+	uint8_t bitArray[ROMCODE_BIT_LENGTH] = {0};
 
 	while(1){
 		ONE_WIRE_STATUS_t result = ResetPulse();
@@ -261,7 +261,7 @@ void SearchRom()
 			//TODO while抜けを実装
 
 			int cnt = 0;
-			for(cnt = 0; cnt < 64; cnt++){
+			for(cnt = 0; cnt < ROMCODE_BIT_LENGTH; cnt++){
 				//bit読み
 				SearchROMBitState_t currentBitState = searchROMBitCheck();
 
@@ -298,7 +298,7 @@ void SearchRom()
 				}
 			}
 
-			if(cnt >= 64){//最後のビットまで行ったらデータコピー
+			if(cnt >= ROMCODE_BIT_LENGTH){//最後のビットまで行ったらデータコピー
 				foundROMCode[numOfDeviceFound] = createROMStructFromBit(bitArray);
 				numOfDeviceFound++;
 
