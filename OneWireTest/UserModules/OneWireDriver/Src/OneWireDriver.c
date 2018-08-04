@@ -253,51 +253,56 @@ void SearchRom()
 
 	while(1){
 		ONE_WIRE_STATUS_t result = ResetPulse();
-		//SearchROM命令
-		WriteByte(CODE_SEARCH_ROM);
 
-		//TODO while抜けを実装
+		if(result == ONE_WIRE_SUCCESS){
+			//SearchROM命令
+			WriteByte(CODE_SEARCH_ROM);
 
-		int cnt = 0;
-		for(cnt = 0; cnt < 64; cnt++){
-			//bit読み
-			SearchROMBitState_t currentBitState = searchROMBitCheck();
+			//TODO while抜けを実装
 
-			switch(currentBitState){
-			case ONLY_0_EXIST: //0しか存在しない場合ビット確定して次
-				write0();
-				bitArray[cnt] = 0;
-				break;
-			case ONLY_1_EXIST: //1しか存在しない場合ビット確定して次
-				write1();
-				bitArray[cnt] = 1;
-				break;
-			case BOTH_EXIST:
-				if(bitState[cnt] == NOT_SEARCHED){//0側をサーチしていない場合まず0をセット
+			int cnt = 0;
+			for(cnt = 0; cnt < 64; cnt++){
+				//bit読み
+				SearchROMBitState_t currentBitState = searchROMBitCheck();
+
+				switch(currentBitState){
+				case ONLY_0_EXIST: //0しか存在しない場合ビット確定して次
 					write0();
 					bitArray[cnt] = 0;
-				}
-				else{//0側をサーチ済みの場合1をセット
+					break;
+				case ONLY_1_EXIST: //1しか存在しない場合ビット確定して次
 					write1();
 					bitArray[cnt] = 1;
+					break;
+				case BOTH_EXIST:
+					if(bitState[cnt] == NOT_SEARCHED){//0側をサーチしていない場合まず0をセット
+						write0();
+						bitArray[cnt] = 0;
+					}
+					else{//0側をサーチ済みの場合1をセット
+						write1();
+						bitArray[cnt] = 1;
+					}
+					break;
+				case NO_DEVICE:
+					break;
+				case NOT_SEARCHED:
+					break;
 				}
-				break;
-			case NO_DEVICE:
-				break;
+
+				if(currentBitState == NO_DEVICE){//デバイス見つからずの場合はもうこのルートをサーチしない
+					break;
+				}
+				else{//ビット値を格納して次へ
+					bitState[cnt] = currentBitState;
+				}
 			}
 
-			if(currentBitState == NO_DEVICE){//デバイス見つからずの場合はもうこのルートをサーチしない
-				break;
-			}
-			else{//ビット値を格納して次へ
-				bitState[cnt] = currentBitState;
-			}
-		}
+			if(cnt >= 64){//最後のビットまで行ったらデータコピー
+				foundROMCode[numOfDeviceFound] = createROMStructFromBit(bitArray);
+				numOfDeviceFound++;
 
-		if(cnt >= 64){//最後のビットまで行ったらデータコピー
-			foundROMCode[numOfDeviceFound] = createROMStructFromBit(bitArray);
-			numOfDeviceFound++;
-
+			}
 		}
 	}
 }
@@ -357,15 +362,29 @@ uint8_t ReadSlot()
 {
 	return readBit();
 }
-ONE_WIRE_ROM_CODE_t createROMStructFromBit(uint8_t byteData[64])
+ONE_WIRE_ROM_CODE_t createROMStructFromBit(uint8_t bitData[64])
 {
 	ONE_WIRE_ROM_CODE_t result;
 	//TODO 実装
+
+
+
 	return result;
 }
 ONE_WIRE_ROM_CODE_t createROMStructFromByte(uint8_t byteData[8])
 {
 	ONE_WIRE_ROM_CODE_t result;
-	//TODO 実装
+
+	//family Code
+	result.Family_Code = byteData[FAMILY_CODE_POS];
+
+	//Serial Number
+	result.SerialNumber_L = (uint16_t)byteData[SERIAL_NUMBER_LL_POS] | ((uint16_t)byteData[SERIAL_NUMBER_LH_POS] << 8);
+	result.SerialNumber_M = (uint16_t)byteData[SERIAL_NUMBER_ML_POS] | ((uint16_t)byteData[SERIAL_NUMBER_MH_POS] << 8);
+	result.SerialNumber_H = (uint16_t)byteData[SERIAL_NUMBER_HL_POS] | ((uint16_t)byteData[SERIAL_NUMBER_HH_POS] << 8);
+
+	//CRC Code
+	result.CRC_Code = byteData[CRC_CODE_POS];
+
 	return result;
 }
