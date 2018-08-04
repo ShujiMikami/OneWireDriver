@@ -14,6 +14,8 @@
 #define SERIAL_NUMBER_HL_POS 5
 #define SERIAL_NUMBER_HH_POS 6
 #define CRC_CODE_POS 7
+#define ROMCODE_BYTE_LENGTH 8
+#define ROMCODE_BIT_LENGTH 64
 
 #define MAX_DEVICE_COUNT (uint16_t)0xFF
 
@@ -31,8 +33,8 @@ typedef enum{
 	NO_DEVICE
 }SearchROMBitState_t;
 
-static ONE_WIRE_ROM_CODE_t createROMStructFromBit(uint8_t bitData[64]);
-static ONE_WIRE_ROM_CODE_t createROMStructFromByte(uint8_t byteData[8]);
+static ONE_WIRE_ROM_CODE_t createROMStructFromBit(uint8_t bitData[ROMCODE_BIT_LENGTH]);
+static ONE_WIRE_ROM_CODE_t createROMStructFromByte(uint8_t byteData[ROMCODE_BYTE_LENGTH]);
 static uint16_t numOfDeviceFound = 0;
 static ONE_WIRE_ROM_CODE_t foundROMCode[MAX_DEVICE_COUNT];
 
@@ -249,8 +251,6 @@ void SearchRom()
 	//各ビットの値
 	uint8_t bitArray[64] = {0};
 
-
-
 	while(1){
 		ONE_WIRE_STATUS_t result = ResetPulse();
 
@@ -362,20 +362,20 @@ uint8_t ReadSlot()
 {
 	return readBit();
 }
-ONE_WIRE_ROM_CODE_t createROMStructFromBit(uint8_t bitData[64])
+ONE_WIRE_ROM_CODE_t createROMStructFromBit(uint8_t bitData[ROMCODE_BIT_LENGTH])
 {
-	uint8_t byteData[8] = {0};
+	uint8_t byteData[ROMCODE_BYTE_LENGTH] = {0};
 	int cnt = 0;
-	for(cnt = 0; cnt < 8; cnt++){
+	for(cnt = 0; cnt < ROMCODE_BYTE_LENGTH; cnt++){
 		int i = 0;
-		for(i = 0; i < 8; i++){
-			byteData[cnt] |= (bitData[8 * cnt + i] << i);
+		for(i = 0; i < BYTE_SIZE; i++){
+			byteData[cnt] |= (bitData[BYTE_SIZE * cnt + i] << i);
 		}
 	}
 
 	return createROMStructFromByte(byteData);
 }
-ONE_WIRE_ROM_CODE_t createROMStructFromByte(uint8_t byteData[8])
+ONE_WIRE_ROM_CODE_t createROMStructFromByte(uint8_t byteData[ROMCODE_BYTE_LENGTH])
 {
 	ONE_WIRE_ROM_CODE_t result;
 
