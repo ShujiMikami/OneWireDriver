@@ -30,6 +30,7 @@ typedef enum{
 	BOTH_EXIST,
 	ONLY_1_EXIST,
 	ONLY_0_EXIST,
+	BOTH_SEARCHED,
 	NO_DEVICE
 }SearchROMBitState_t;
 
@@ -44,7 +45,7 @@ static uint8_t readBit();
 static void getByteArrayFromRomCode(ONE_WIRE_ROM_CODE_t data, uint8_t* buffer);
 static ONE_WIRE_STATUS_t readPresensePulse();
 static SearchROMBitState_t searchROMBitCheck();
-
+static uint8_t isAllPatternFinished(SearchROMBitState_t bitState[ROMCODE_BIT_LENGTH]);
 
 ONE_WIRE_STATUS_t ResetPulse()
 {
@@ -252,13 +253,15 @@ void SearchRom()
 	uint8_t bitArray[ROMCODE_BIT_LENGTH] = {0};
 
 	while(1){
+		if(isAllPatternFinished(bitState) == 1){
+			break;
+		}
+
 		ONE_WIRE_STATUS_t result = ResetPulse();
 
 		if(result == ONE_WIRE_SUCCESS){
 			//SearchROM命令
 			WriteByte(CODE_SEARCH_ROM);
-
-			//TODO while抜けを実装
 
 			int cnt = 0;
 			for(cnt = 0; cnt < ROMCODE_BIT_LENGTH; cnt++){
@@ -279,14 +282,17 @@ void SearchRom()
 						write0();
 						bitArray[cnt] = 0;
 					}
-					else{//0側をサーチ済みの場合1をセット
+					else if(bitState[cnt] != BOTH_SEARCHED){//0側をサーチ済みの場合1をセット
 						write1();
 						bitArray[cnt] = 1;
+						currentBitState = BOTH_SEARCHED;
 					}
 					break;
 				case NO_DEVICE:
 					break;
 				case NOT_SEARCHED:
+					break;
+				case BOTH_SEARCHED:
 					break;
 				}
 
@@ -301,7 +307,6 @@ void SearchRom()
 			if(cnt >= ROMCODE_BIT_LENGTH){//最後のビットまで行ったらデータコピー
 				foundROMCode[numOfDeviceFound] = createROMStructFromBit(bitArray);
 				numOfDeviceFound++;
-
 			}
 		}
 	}
@@ -391,4 +396,36 @@ ONE_WIRE_ROM_CODE_t createROMStructFromByte(uint8_t byteData[ROMCODE_BYTE_LENGTH
 	result.CRC_Code = byteData[CRC_CODE_POS];
 
 	return result;
+}
+uint8_t isAllPatternFinished(SearchROMBitState_t bitState[ROMCODE_BIT_LENGTH])
+{
+	uint8_t result = 0;
+
+	int cnt = 0;
+
+	for(cnt = 0; cnt < ROMCODE_BIT_LENGTH; cnt++){
+		if(bitState[cnt] == NOT_SEARCHED ||
+		   bitState[cnt] == BOTH_EXIST){
+			result = 0;
+			break;
+		}
+		else{
+			result = 1;
+		}
+	}
+
+	return result;
+}
+uint8_t GetNumOfROMCodeFound()
+{
+	return numOfDeviceFound;
+}
+void GetROMCode(ONE_WIRE_ROM_CODE_t* buffer, uint8_t count)
+{
+	if(numOfDeviceFound >= count){
+		int cnt = 0;
+		for(cnt = 0; cnt < count; cnt++){
+			buffer[cnt] = foundROMCode[cnt];
+		}
+	}
 }

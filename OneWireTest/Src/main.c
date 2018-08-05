@@ -102,29 +102,14 @@ int main(void)
 
   SearchRom();
 
-//  ONE_WIRE_STATUS_t result = ResetPulse();
-//
-//  SkipRom();
-//
-//  Convert();
-//
-//  result = ResetPulse();
-//
-//  SkipRom();
-//
-//  ScratchPadData_t scratchPad = ReadScratchPad();
-//
-//  int16_t intMask = ~0xFFF;
-//  int16_t signMask = 0x8000;
-//
-//  int16_t temperatureInt = 0;
-//  temperatureInt = scratchPad.Temperature;
-//  if((scratchPad.Temperature & signMask) != 0){
-//	  temperatureInt |= intMask;
-//  }
-//
-//  double temperature = 0;
-//  temperature = temperatureInt * 0.0625;
+  uint8_t numOfROMs = GetNumOfROMCodeFound();
+
+  ONE_WIRE_ROM_CODE_t romCodes[10];
+
+  if(numOfROMs < 10){
+	  GetROMCode(romCodes, numOfROMs);
+  }
+
 
   /* USER CODE END 2 */
 
