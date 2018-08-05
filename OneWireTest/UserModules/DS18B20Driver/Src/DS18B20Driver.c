@@ -26,13 +26,21 @@
 #define CODE_WRITE_SCRATCHPAD (unsigned char)0x4E
 #define WRITABLE_BYTE_LENGTH 3
 
+#define CONFIGURATION_DEFAULT_VALUE 0x1F
+#define RESOLUTION_BITPOS 5
+
 static void waitForConvert();
 
-void Convert()
+ONE_WIRE_STATUS_t Convert(ONE_WIRE_ROM_CODE_t romCode)
 {
-	WriteByte(CODE_CONVERT);
+	ONE_WIRE_STATUS_t result = ResetPulse();
 
-	waitForConvert();
+	if(result == ONE_WIRE_SUCCESS){
+		WriteByte(CODE_CONVERT);
+		waitForConvert();
+	}
+
+	return result;
 }
 void waitForConvert()
 {
@@ -43,7 +51,7 @@ void waitForConvert()
 		}
 	}
 }
-void WriteScratchPad(ScratchPadData_t dataToWrite)
+void WriteScratchPad(ONE_WIRE_ROM_CODE_t romCode, ScratchPadData_t dataToWrite)
 {
 	unsigned char data[WRITABLE_BYTE_LENGTH] = {0};
 
@@ -57,7 +65,7 @@ void WriteScratchPad(ScratchPadData_t dataToWrite)
 		WriteByte(data[cnt]);
 	}
 }
-ScratchPadData_t ReadScratchPad()
+ScratchPadData_t ReadScratchPad(ONE_WIRE_ROM_CODE_t romCode)
 {
 	ScratchPadData_t result;
 
@@ -77,11 +85,19 @@ ScratchPadData_t ReadScratchPad()
 
 	return result;
 }
-void RecallE2()
+void RecallE2(ONE_WIRE_ROM_CODE_t romCode)
 {
 
 }
-void ReadPowerSupply()
+void ReadPowerSupply(ONE_WIRE_ROM_CODE_t romCode)
 {
 
+}
+ONE_WIRE_STATUS_t SetResolution_t(ONE_WIRE_ROM_CODE_t romCode, RESOLUTION_t resolution)
+{
+	ScratchPadData_t scratchPadValue;
+
+	scratchPadValue.Configuration_Register = CONFIGURATION_DEFAULT_VALUE | (resolution << RESOLUTION_BITPOS);
+
+	WriteScratchPad(romCode, scratchPadValue);
 }
