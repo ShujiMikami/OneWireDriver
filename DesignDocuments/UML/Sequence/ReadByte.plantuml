@@ -1,0 +1,28 @@
+@startuml
+
+hide footbox
+
+title ReadByte sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+
+-> ModuleOneWireDriver : ReadByte()
+  activate ModuleOneWireDriver
+
+ModuleOneWireDriver -> ModuleOneWireDriver : result = 0
+  activate ModuleOneWireDriver
+  deactivate ModuleOneWireDriver
+
+loop cnt[0:7]
+  ref over ModuleOneWireDriver
+    result |= readBit() << cnt
+    [[./readBit.svg]]
+  end ref
+end
+
+<-- ModuleOneWireDriver : result
+  deactivate ModuleOneWireDriver
+
+@enduml
