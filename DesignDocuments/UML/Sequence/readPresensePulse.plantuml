@@ -84,7 +84,7 @@ else
     deactivate ModuleOneWireDriver
 end
 
-<-- ModuleOneWireDriver
+<-- ModuleOneWireDriver : result
   deactivate ModuleOneWireDriver
 
 @enduml
