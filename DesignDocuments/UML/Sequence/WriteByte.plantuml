@@ -23,7 +23,7 @@ loop cnt[0:7]
       [[./write1.svg]]
     end ref
   end
-
+end
 <-- ModuleOneWireDriver
   deactivate ModuleOneWireDriver
 
