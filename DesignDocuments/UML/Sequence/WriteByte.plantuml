@@ -1,0 +1,30 @@
+@startuml
+
+hide footbox
+
+title WriteByte sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+
+-> ModuleOneWireDriver : WriteByte(byteData : uint8_t)
+  activate ModuleOneWireDriver
+
+loop cnt[0:7]
+  opt bit[cnt] of byteData = 1
+    ref over ModuleOneWireDriver
+      write0()
+      [[./write0.svg]]
+    end ref
+  else
+    ref over ModuleOneWireDriver
+      write1()
+      [[./write1.svg]]
+    end ref
+  end
+
+<-- ModuleOneWireDriver
+  deactivate ModuleOneWireDriver
+
+@enduml
