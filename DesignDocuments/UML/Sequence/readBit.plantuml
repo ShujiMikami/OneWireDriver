@@ -1,0 +1,78 @@
+@startuml
+
+hide footbox
+
+title readBit sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+participant "GPIO_Wrapper" as ModuleGPIO_Wrapper<<M,Green>>[[../Class/OneWireDriver.svg]]
+participant "Wait_Wrapper" as ModuleWait_Wrapper<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+-> ModuleOneWireDriver : readBit()
+  activate ModuleOneWireDriver
+
+==InitializePulse output==
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : SetPin2TxMode()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : AssertPin()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+ModuleOneWireDriver -> ModuleWait_Wrapper : Wait_us(T_INT)
+  activate ModuleWait_Wrapper
+ModuleOneWireDriver <-- ModuleWait_Wrapper
+  deactivate ModuleWait_Wrapper
+
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : NegatePin()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+==ReadPinState==
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : SetPin2RxMode()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+ModuleOneWireDriver -> ModuleWait_Wrapper : Wait_us(T_RC)
+  activate ModuleWait_Wrapper
+ModuleOneWireDriver <-- ModuleWait_Wrapper
+  deactivate ModuleWait_Wrapper
+
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : GetPinState()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper : current state = Pin status
+  deactivate ModuleGPIO_Wrapper
+
+==Wiat for Time slot==
+ModuleOneWireDriver -> ModuleWait_Wrapper : Wait_us(T_SLOT - T_INT - T_RC)
+  activate ModuleWait_Wrapper
+ModuleOneWireDriver <-- ModuleWait_Wrapper
+  deactivate ModuleWait_Wrapper
+
+==Recovery==
+ModuleOneWireDriver -> ModuleWait_Wrapper : Wait_us(T_REC)
+  activate ModuleWait_Wrapper
+ModuleOneWireDriver <-- ModuleWait_Wrapper
+  deactivate ModuleWait_Wrapper
+
+==Evaluate State==
+opt currentState[GPIO_ASSERTED]
+  ModuleOneWireDriver -> ModuleOneWireDriver : result = 0
+    activate ModuleOneWireDriver
+    deactivate ModuleOneWireDriver
+else
+  ModuleOneWireDriver -> ModuleOneWireDriver : result = 1
+    activate ModuleOneWireDriver
+    deactivate ModuleOneWireDriver
+end
+
+<-- ModuleOneWireDriver : result
+  deactivate ModuleOneWireDriver
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+
+hide footbox
+
+title ReadROM sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+-> OneWireDriver : ReadROM()
+  activate OneWireDriver
+
+OneWireDriver -> OneWireDriver : data[ROM_CODE_SIZE] = {0}
+  activate OneWireDriver
+  deactivate OneWireDriver
+
+loop cnt[0:64)
+  ref over OneWireDriver
+    data[cnt] = ReadByte()
+    [[./ReadByte.svg]]
+  end ref
+end
+
+OneWireDriver -> OneWireDriver : input data to struct "result"
+  activate OneWireDriver
+  deactivate OneWireDriver
+
+<-- OneWireDriver : result
+  deactivate OneWireDriver
+
+
+@enduml

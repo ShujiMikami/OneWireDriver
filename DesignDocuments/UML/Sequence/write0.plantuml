@@ -1,0 +1,50 @@
+@startuml
+
+hide footbox
+
+title write0 sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+participant "GPIO_Wrapper" as ModuleGPIO_Wrapper<<M,Green>>[[../Class/OneWireDriver.svg]]
+participant "Wait_Wrapper" as ModuleWait_Wrapper<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+-> ModuleOneWireDriver : write0()
+  activate ModuleOneWireDriver
+
+== PulseOutput ==
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : SetPin2TxMode()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : AssertPin()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+ModuleOneWireDriver -> ModuleWait_Wrapper : Wait_us(T_LOW0)
+  activate ModuleWait_Wrapper
+ModuleOneWireDriver <-- ModuleWait_Wrapper
+  deactivate ModuleWait_Wrapper
+
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : NegatePin()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+==Wiat for Time slot==
+ModuleOneWireDriver -> ModuleWait_Wrapper : Wait_us(T_SLOT - T_LOW0)
+  activate ModuleWait_Wrapper
+ModuleOneWireDriver <-- ModuleWait_Wrapper
+  deactivate ModuleWait_Wrapper
+
+==Recovery==
+ModuleOneWireDriver -> ModuleWait_Wrapper : Wait_us(T_REC)
+  activate ModuleWait_Wrapper
+ModuleOneWireDriver <-- ModuleWait_Wrapper
+  deactivate ModuleWait_Wrapper
+
+<-- ModuleOneWireDriver
+  deactivate ModuleOneWireDriver
+
+@enduml

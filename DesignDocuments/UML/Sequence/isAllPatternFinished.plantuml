@@ -1,0 +1,29 @@
+@startuml
+
+hide footbox
+
+title isAllPatternFinished sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+
+-> ModuleOneWireDriver : isAllPatternFinished(bitState[ROMCODE_BIT_LENGTH] : SearchROMBitState_t)
+  activate ModuleOneWireDriver
+
+loop cnt[0:ROMCODE_BIT_LENGTH)
+  break bitState[cnt] = NOT_SEARCHED or bitState[cnt] = BOTH_EXIST
+    ModuleOneWireDriver -> ModuleOneWireDriver : result = 0
+      activate ModuleOneWireDriver
+      deactivate ModuleOneWireDriver
+  end
+
+  ModuleOneWireDriver -> ModuleOneWireDriver : result = 1
+    activate ModuleOneWireDriver
+    deactivate ModuleOneWireDriver
+end
+
+<-- ModuleOneWireDriver : result
+  deactivate ModuleOneWireDriver
+
+@enduml
