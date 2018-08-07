@@ -1,0 +1,90 @@
+@startuml
+
+hide footbox
+
+title readPresensePulse sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+participant "GPIO_Wrapper" as ModuleGPIO_Wrapper<<M,Green>>[[../Class/OneWireDriver.svg]]
+participant "Wait_Wrapper" as ModuleWait_Wrapper<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+-> ModuleOneWireDriver : readPresensePulse()
+  activate ModuleOneWireDriver
+
+==Initialize and 1st measure==
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : SetPin2RxMode()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : GetPinState()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper : previous state = Pin status
+note left
+  Initial pin status
+end note
+  deactivate ModuleGPIO_Wrapper
+
+ModuleOneWireDriver -> ModuleWait_Wrapper : ClearTimerCount()
+  activate ModuleWait_Wrapper
+ModuleOneWireDriver <-- ModuleWait_Wrapper
+  deactivate ModuleWait_Wrapper
+
+==Detect pulse==
+loop
+  ModuleOneWireDriver -> ModuleWait_Wrapper : GetTimerCount()
+    activate ModuleWait_Wrapper
+  ModuleOneWireDriver <-- ModuleWait_Wrapper : TimerCount
+    deactivate ModuleWait_Wrapper
+
+  break TimerCount > T_RSTH
+  end
+
+  ModuleOneWireDriver -> ModuleGPIO_Wrapper : GetPinState()
+    activate ModuleGPIO_Wrapper
+  ModuleOneWireDriver <-- ModuleGPIO_Wrapper : current state = Pin status
+    deactivate ModuleGPIO_Wrapper
+
+  opt previous pin status[GPIO_NEGATED] & new pin staus[GPIO_ASSERTED]
+    ModuleOneWireDriver -> ModuleWait_Wrapper : GetTimerCount()
+    note left
+      Detect pin falling edge
+    end note
+      activate ModuleWait_Wrapper
+    ModuleOneWireDriver <-- ModuleWait_Wrapper : startCnt = Timer count
+      deactivate ModuleWait_Wrapper
+  end
+
+  opt startCnt[already get]
+    opt previous pin status[GPIO_ASSERTED] & current pin status[GPIO_NEGATED]
+      ModuleOneWireDriver -> ModuleWait_Wrapper : GetTimerCount()
+      note left
+        Detect pin rising edge
+      end note
+        activate ModuleWait_Wrapper
+      ModuleOneWireDriver <-- ModuleWait_Wrapper : endCnt = Timer count
+        deactivate ModuleWait_Wrapper
+    end
+  end
+
+  ModuleOneWireDriver -> ModuleOneWireDriver : previous state = current state
+    activate ModuleOneWireDriver
+    deactivate ModuleOneWireDriver
+end
+
+==Evaluate pulse width==
+opt (endCnt - startCnt)[T_PDLOW_MIN,T_PDLOW_MAX]
+  ModuleOneWireDriver -> ModuleOneWireDriver : result = ONE_WIRE_SUCCESS
+    activate ModuleOneWireDriver
+    deactivate ModuleOneWireDriver
+else
+  ModuleOneWireDriver -> ModuleOneWireDriver : result = ONE_WIRE_FAIL
+    activate ModuleOneWireDriver
+    deactivate ModuleOneWireDriver
+end
+
+<-- ModuleOneWireDriver : result
+  deactivate ModuleOneWireDriver
+
+@enduml

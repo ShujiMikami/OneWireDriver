@@ -1,0 +1,46 @@
+@startuml
+
+hide footbox
+
+title searchROMBitCheck sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+
+-> ModuleOneWireDriver : searchROMBitCheck()
+  activate ModuleOneWireDriver
+
+==Read AND and NOT-AND==
+ref over ModuleOneWireDriver
+  andOfLsb = readBit()
+  [[./readBit.svg]]
+end ref
+ref over ModuleOneWireDriver
+  andOfNOTLsb = readBit()
+  [[./readBit.svg]]
+end ref
+
+==Evaluate the Situation==
+opt andOfLSB | andOfNOTLsb = 00b
+  ModuleOneWireDriver -> ModuleOneWireDriver : result = BOTH_EXISTS
+      activate ModuleOneWireDriver
+      deactivate ModuleOneWireDriver
+else 01b
+  ModuleOneWireDriver -> ModuleOneWireDriver : result = ONLY_0_EXISTS
+    activate ModuleOneWireDriver
+    deactivate ModuleOneWireDriver
+else 10b
+  ModuleOneWireDriver -> ModuleOneWireDriver : result = ONLY_1_EXISTS
+    activate ModuleOneWireDriver
+    deactivate ModuleOneWireDriver
+else 11b
+  ModuleOneWireDriver -> ModuleOneWireDriver : result = NO_DEVICE
+    activate ModuleOneWireDriver
+    deactivate ModuleOneWireDriver
+end
+
+<-- ModuleOneWireDriver : result
+  deactivate ModuleOneWireDriver
+
+@enduml

@@ -26,7 +26,7 @@ typedef struct{
 }ONE_WIRE_ROM_CODE_t;
 
 ONE_WIRE_STATUS_t ResetPulse();
-void WriteByte(unsigned char byteData);
+void WriteByte(uint8_t byteData);
 uint8_t ReadByte();
 void SearchRom();
 ONE_WIRE_ROM_CODE_t ReadRom();

@@ -1,0 +1,44 @@
+@startuml
+
+hide footbox
+
+title Reset pulse sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+participant "GPIO_Wrapper" as ModuleGPIO_Wrapper<<M,Green>>[[../Class/OneWireDriver.svg]]
+participant "Wait_Wrapper" as ModuleWait_Wrapper<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+-> ModuleOneWireDriver : ResetPulse()
+  activate ModuleOneWireDriver
+
+== PulseOutput ==
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : SetPin2TxMode()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : AssertPin()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+ModuleOneWireDriver -> ModuleWait_Wrapper : Wait_us(T_RSTL)
+  activate ModuleWait_Wrapper
+ModuleOneWireDriver <-- ModuleWait_Wrapper
+  deactivate ModuleWait_Wrapper
+
+ModuleOneWireDriver -> ModuleGPIO_Wrapper : NegatePin()
+  activate ModuleGPIO_Wrapper
+ModuleOneWireDriver <-- ModuleGPIO_Wrapper
+  deactivate ModuleGPIO_Wrapper
+
+== ReadReaction ==
+ref over ModuleOneWireDriver
+  readPresensePulse()
+  [[./readPresensePulse.svg]]
+end ref
+
+<-- ModuleOneWireDriver : result of readPresensePulse
+  deactivate ModuleOneWireDriver
+
+@enduml
