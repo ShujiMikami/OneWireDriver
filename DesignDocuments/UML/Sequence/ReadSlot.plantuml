@@ -1,0 +1,22 @@
+@startuml
+
+hide footbox
+
+title ReadSlot sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+
+-> ModuleOneWireDriver : ReadSlot()
+  activate ModuleOneWireDriver
+
+ref over ModuleOneWireDriver
+  result = readBit()
+  [[./readBit.svg]]
+end ref
+
+<-- ModuleOneWireDriver : result
+  deactivate ModuleOneWireDriver
+
+@enduml
