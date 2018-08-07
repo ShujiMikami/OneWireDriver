@@ -1,0 +1,114 @@
+@startuml
+
+hide footbox
+
+title searchROMBitCheck sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+-> ModuleOneWireDriver : searchROMBitCheck()
+  activate ModuleOneWireDriver
+
+==Initialize variables==
+ModuleOneWireDriver -> ModuleOneWireDriver : bitState[ROMCODE_BIT_LENGTH] = {NOT_SEARCHED}
+  activate ModuleOneWireDriver
+  deactivate ModuleOneWireDriver
+
+ModuleOneWireDriver -> ModuleOneWireDriver : bitArray[ROMCODE_BIT_LENGTH] = {0}
+  activate ModuleOneWireDriver
+  deactivate ModuleOneWireDriver
+
+loop
+==Check if the search finished==
+  ref over ModuleOneWireDriver
+    isAllPatternFinished(bitState)
+    [[./isAllPatternFinished.svg]]
+  end ref
+
+  break all pattern finished
+  end
+
+==ResetPulse==
+  ref over ModuleOneWireDriver
+    result = ResetPulse()
+    [[./ResetPulse.svg]]
+  end ref
+
+  opt result[ONE_WIRE_SUCCESS]
+  ==SearchROMCommand==
+    ref over ModuleOneWireDriver
+      WriteByte(CODE_SEARCH_ROM)
+      [[./WriteByte.svg]]
+    end ref
+
+    loop cnt[0:ROMCODE_BIT_LENGTH]
+    ==Binary Search of Each bit==
+      ref over ModuleOneWireDriver
+        currentBitState = searchROMBitCheck()
+        [[./searchROMBitCheck.svg]]
+      end ref
+
+      opt currentBitState[ONLY_0_EXIST]
+        ref over ModuleOneWireDriver
+          write0()
+          [[./write0.svg]]
+        end ref
+        ModuleOneWireDriver -> ModuleOneWireDriver : bitArray[cnt] = 0
+          activate ModuleOneWireDriver
+          deactivate ModuleOneWireDriver
+      else currentBitState[ONLY_1_EXIST]
+        ref over ModuleOneWireDriver
+          write1()
+          [[./write1.svg]]
+        end ref
+        ModuleOneWireDriver -> ModuleOneWireDriver : bitArray[cnt] = 1
+          activate ModuleOneWireDriver
+          deactivate ModuleOneWireDriver
+      else currentBitState[BOTH_EXISTS]
+        opt bitState[cnt] = NOT_SEARCHED
+          ref over ModuleOneWireDriver
+            write0()
+            [[./write0.svg]]
+          end ref
+          ModuleOneWireDriver -> ModuleOneWireDriver : bitArray[cnt] = 0
+            activate ModuleOneWireDriver
+            deactivate ModuleOneWireDriver
+        else bitState[cnt] != BOTH_SEARCHED
+          ref over ModuleOneWireDriver
+            write1()
+            [[./write1.svg]]
+          end ref
+          ModuleOneWireDriver -> ModuleOneWireDriver : bitArray[cnt] = 1
+            activate ModuleOneWireDriver
+            deactivate ModuleOneWireDriver
+          ModuleOneWireDriver -> ModuleOneWireDriver : currentBitState = BOTH_SEARCHED
+            activate ModuleOneWireDriver
+            deactivate ModuleOneWireDriver
+        end
+      end
+
+      break currentBitState = NO_DEVICE
+      end
+
+      ModuleOneWireDriver -> ModuleOneWireDriver : bitState[cnt] = currentBitState
+        activate ModuleOneWireDriver
+        deactivate ModuleOneWireDriver
+    end
+
+==Store the found ROMCode==
+    opt cnt >= ROMCODE_BIT_LENGTH
+      ref over ModuleOneWireDriver
+        foundROMCode[numOfDeviceFound] = createROMStructFromBit(bitArray)
+        [[./createROMStructFromBit.svg]]
+      end ref
+      ModuleOneWireDriver -> ModuleOneWireDriver : numOfDeviceFound++
+        activate ModuleOneWireDriver
+        deactivate ModuleOneWireDriver
+    end
+  end
+end
+<-- ModuleOneWireDriver
+  deactivate ModuleOneWireDriver
+
+@enduml
