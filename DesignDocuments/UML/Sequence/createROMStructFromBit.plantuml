@@ -1,0 +1,24 @@
+@startuml
+
+hide footbox
+
+title createROMStructFromBit sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+-> ModuleOneWireDriver : createROMStructFromBit(bitData[ROMCODE_BIT_LENGTH] : uint8_t)
+  activate ModuleOneWireDriver
+
+ModuleOneWireDriver -> ModuleOneWireDriver : arrange each bit being shifted into byte
+  activate ModuleOneWireDriver
+  deactivate ModuleOneWireDriver
+
+ref over ModuleOneWireDriver
+  struct data = createROMStructFromByte(byteData)
+  [[./createROMStructFromByte.svg]]
+end ref
+
+<-- ModuleOneWireDriver : struct data
+  deactivate ModuleOneWireDriver
+
+@enduml
