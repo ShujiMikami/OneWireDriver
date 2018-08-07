@@ -1,0 +1,21 @@
+@startuml
+
+hide footbox
+
+title getByteArrayFromRomCode sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+
+-> ModuleOneWireDriver : getByteArrayFromRomCode(data : ONE_WIRE_ROM_CODE_t, buffer : uint8_t*)
+  activate ModuleOneWireDriver
+
+ModuleOneWireDriver -> ModuleOneWireDriver : data input to Structure
+  activate ModuleOneWireDriver
+  deactivate ModuleOneWireDriver
+
+<-- ModuleOneWireDriver
+  deactivate ModuleOneWireDriver
+
+@enduml
