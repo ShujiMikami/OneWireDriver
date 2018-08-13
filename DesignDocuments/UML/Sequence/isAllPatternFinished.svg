@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="372px" preserveAspectRatio="none" style="width:906px;height:372px;" version="1.1" viewBox="0 0 906 372" width="906px" zoomAndPan="magnify"><defs><filter height="300%" id="f12fw0uoa7a8dc" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="217" x="345.75" y="23.5352">isAllPatternFinished sequence</text><rect fill="#FFFFFF" filter="url(#f12fw0uoa7a8dc)" height="236.5527" style="stroke: #A80036; stroke-width: 1.0;" width="10" x="501" y="105.7988"/><rect fill="#FFFFFF" filter="url(#f12fw0uoa7a8dc)" height="28" style="stroke: #A80036; stroke-width: 1.0;" width="10" x="506" y="191.4199"/><rect fill="#FFFFFF" filter="url(#f12fw0uoa7a8dc)" height="28" style="stroke: #A80036; stroke-width: 1.0;" width="10" x="506" y="270.7305"/><rect fill="#FFFFFF" filter="url(#f12fw0uoa7a8dc)" height="193.2422" style="stroke: #000000; stroke-width: 2.0;" width="482" x="413.5" y="120.7988"/><rect fill="#FFFFFF" filter="url(#f12fw0uoa7a8dc)" height="89.6211" style="stroke: #000000; stroke-width: 2.0;" width="462" x="423.5" y="145.1094"/><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="505.5" x2="505.5" y1="74.4883" y2="360.3516"/><a target="_top" xlink:actuate="onRequest" xlink:href="../Class/OneWireDriver.svg" xlink:show="new" xlink:title="../Class/OneWireDriver.svg" xlink:type="simple"><rect fill="#FEFECE" filter="url(#f12fw0uoa7a8dc)" height="36" style="stroke: #A80036; stroke-width: 1.5;" width="141" x="433.5" y="33.4883"/><ellipse cx="451.5" cy="51.4883" fill="#008000" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M447.2139,45.0952 L450.1357,45.0952 L451.6133,50.5322 L453.0825,45.0952 L456.021,45.0952 L456.021,57.4883 L453.9126,57.4883 L453.9126,47.5605 L452.6011,52.981 L450.6504,52.981 L449.3223,47.5605 L449.3223,57.4883 L447.2139,57.4883 Z "/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="99" x="468.5" y="54.4883">OneWireDriver</text></a><rect fill="#FFFFFF" filter="url(#f12fw0uoa7a8dc)" height="236.5527" style="stroke: #A80036; stroke-width: 1.0;" width="10" x="501" y="105.7988"/><rect fill="#FFFFFF" filter="url(#f12fw0uoa7a8dc)" height="28" style="stroke: #A80036; stroke-width: 1.0;" width="10" x="506" y="191.4199"/><rect fill="#FFFFFF" filter="url(#f12fw0uoa7a8dc)" height="28" style="stroke: #A80036; stroke-width: 1.0;" width="10" x="506" y="270.7305"/><polygon fill="#A80036" points="489,101.7988,499,105.7988,489,109.7988,493,105.7988" style="stroke: #A80036; stroke-width: 1.0;"/><line style="stroke: #A80036; stroke-width: 1.0;" x1="3" x2="495" y1="105.7988" y2="105.7988"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="479" x="10" y="101.0566">isAllPatternFinished(bitState[ROMCODE_BIT_LENGTH] : SearchROMBitState_t)</text><path d="M413.5,120.7988 L487.5,120.7988 L487.5,127.7988 L477.5,137.7988 L413.5,137.7988 L413.5,120.7988 " fill="#EEEEEE" style="stroke: #000000; stroke-width: 1.0;"/><rect fill="none" height="193.2422" style="stroke: #000000; stroke-width: 2.0;" width="482" x="413.5" y="120.7988"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="29" x="428.5" y="134.3672">loop</text><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="180" x="502.5" y="133.4336">[cnt[0:ROMCODE_BIT_LENGTH)]</text><path d="M423.5,145.1094 L507.5,145.1094 L507.5,152.1094 L497.5,162.1094 L423.5,162.1094 L423.5,145.1094 " fill="#EEEEEE" style="stroke: #000000; stroke-width: 1.0;"/><rect fill="none" height="89.6211" style="stroke: #000000; stroke-width: 2.0;" width="462" x="423.5" y="145.1094"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="39" x="438.5" y="158.6777">break</text><text fill="#000000" font-family="sans-serif" font-size="11" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="358" x="522.5" y="157.7441">[bitState[cnt] = NOT_SEARCHED or bitState[cnt] = BOTH_EXIST]</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="516" x2="558" y1="183.7305" y2="183.7305"/><line style="stroke: #A80036; stroke-width: 1.0;" x1="558" x2="558" y1="183.7305" y2="196.7305"/><line style="stroke: #A80036; stroke-width: 1.0;" x1="517" x2="558" y1="196.7305" y2="196.7305"/><polygon fill="#A80036" points="527,192.7305,517,196.7305,527,200.7305,523,196.7305" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="62" x="523" y="178.9883">result = 0</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="516" x2="558" y1="263.041" y2="263.041"/><line style="stroke: #A80036; stroke-width: 1.0;" x1="558" x2="558" y1="263.041" y2="276.041"/><line style="stroke: #A80036; stroke-width: 1.0;" x1="517" x2="558" y1="276.041" y2="276.041"/><polygon fill="#A80036" points="527,272.041,517,276.041,527,280.041,523,276.041" style="stroke: #A80036; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="62" x="523" y="258.2988">result = 1</text><polygon fill="#A80036" points="14,338.3516,4,342.3516,14,346.3516,10,342.3516" style="stroke: #A80036; stroke-width: 1.0;"/><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="8" x2="505" y1="342.3516" y2="342.3516"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="36" x="20" y="337.6094">result</text><!--
+@startuml
+
+hide footbox
+
+title isAllPatternFinished sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+
+-> ModuleOneWireDriver : isAllPatternFinished(bitState[ROMCODE_BIT_LENGTH] : SearchROMBitState_t)
+  activate ModuleOneWireDriver
+
+loop cnt[0:ROMCODE_BIT_LENGTH)
+  break bitState[cnt] = NOT_SEARCHED or bitState[cnt] = BOTH_EXIST
+    ModuleOneWireDriver -> ModuleOneWireDriver : result = 0
+      activate ModuleOneWireDriver
+      deactivate ModuleOneWireDriver
+  end
+
+  ModuleOneWireDriver -> ModuleOneWireDriver : result = 1
+    activate ModuleOneWireDriver
+    deactivate ModuleOneWireDriver
+end
+
+<- - ModuleOneWireDriver : result
+  deactivate ModuleOneWireDriver
+
+@enduml
+
+PlantUML version 1.2018.09(Sat Jul 28 01:58:18 JST 2018)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 9.0.1+11
+Operating System: Mac OS X
+OS Version: 10.13.6
+Default Encoding: UTF-8
+Language: ja
+Country: JP
+--></g></svg>
