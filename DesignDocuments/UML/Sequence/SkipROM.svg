@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="210px" preserveAspectRatio="none" style="width:205px;height:210px;" version="1.1" viewBox="0 0 205 210" width="205px" zoomAndPan="magnify"><defs><filter height="300%" id="f10cv12njrz7ml" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="137" x="33.25" y="23.5352">SkipROM sequence</text><rect fill="#FFFFFF" filter="url(#f10cv12njrz7ml)" height="74.9316" style="stroke: #A80036; stroke-width: 1.0;" width="10" x="86" y="105.7988"/><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="90.5" x2="90.5" y1="74.4883" y2="198.7305"/><a target="_top" xlink:actuate="onRequest" xlink:href="../Class/OneWireDriver.svg" xlink:show="new" xlink:title="../Class/OneWireDriver.svg" xlink:type="simple"><rect fill="#FEFECE" filter="url(#f10cv12njrz7ml)" height="36" style="stroke: #A80036; stroke-width: 1.5;" width="141" x="18.5" y="33.4883"/><ellipse cx="36.5" cy="51.4883" fill="#008000" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M32.2139,45.0952 L35.1357,45.0952 L36.6133,50.5322 L38.0825,45.0952 L41.021,45.0952 L41.021,57.4883 L38.9126,57.4883 L38.9126,47.5605 L37.6011,52.981 L35.6504,52.981 L34.3223,47.5605 L34.3223,57.4883 L32.2139,57.4883 Z "/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="99" x="53.5" y="54.4883">OneWireDriver</text></a><rect fill="#FFFFFF" filter="url(#f10cv12njrz7ml)" height="74.9316" style="stroke: #A80036; stroke-width: 1.0;" width="10" x="86" y="105.7988"/><polygon fill="#A80036" points="74,101.7988,84,105.7988,74,109.7988,78,105.7988" style="stroke: #A80036; stroke-width: 1.0;"/><line style="stroke: #A80036; stroke-width: 1.0;" x1="3" x2="80" y1="105.7988" y2="105.7988"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="64" x="10" y="101.0566">SkipROM()</text><rect fill="#FFFFFF" filter="url(#f10cv12njrz7ml)" height="55.9316" style="stroke: #000000; stroke-width: 2.0;" width="179" x="15.5" y="113.7988"/><polygon fill="#EEEEEE" points="15.5,113.7988,79.5,113.7988,79.5,120.7988,69.5,130.7988,15.5,130.7988,15.5,113.7988" style="stroke: #000000; stroke-width: 2.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="19" x="28.5" y="128.3672">ref</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="171" x="21.5" y="147.3672">WriteByte(CODE_SKIP_ROM)</text><a target="_top" xlink:actuate="onRequest" xlink:href="./WriteByte.svg" xlink:show="new" xlink:title="./WriteByte.svg" xlink:type="simple"><text fill="#0000FF" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" text-decoration="underline" textLength="95" x="21.5" y="162.6777">./WriteByte.svg</text><line style="stroke: #0000FF; stroke-width: 1.0;" x1="21.5" x2="116.5" y1="164.6777" y2="164.6777"/></a><polygon fill="#A80036" points="14,176.7305,4,180.7305,14,184.7305,10,180.7305" style="stroke: #A80036; stroke-width: 1.0;"/><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="8" x2="90" y1="180.7305" y2="180.7305"/><!--
+@startuml
+
+hide footbox
+
+title SkipROM sequence
+
+participant "OneWireDriver" as ModuleOneWireDriver<<M,Green>>[[../Class/OneWireDriver.svg]]
+
+
+
+-> ModuleOneWireDriver : SkipROM()
+  activate ModuleOneWireDriver
+
+ref over ModuleOneWireDriver
+  WriteByte(CODE_SKIP_ROM)
+  [[./WriteByte.svg]]
+end ref
+
+<- - ModuleOneWireDriver
+  deactivate ModuleOneWireDriver
+
+@enduml
+
+PlantUML version 1.2018.09(Sat Jul 28 01:58:18 JST 2018)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 9.0.1+11
+Operating System: Mac OS X
+OS Version: 10.13.6
+Default Encoding: UTF-8
+Language: ja
+Country: JP
+--></g></svg>
